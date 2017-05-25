@@ -75,3 +75,75 @@ if($_POST['submit']=='Login')
 	header("Location: demo.php");
 	exit;
 }
+
+else if($_POST['submit']=='Register')
+{
+	// If the Register form has been submitted
+	$err = array();
+
+	if(strlen($_POST['username'])<4 || strlen($_POST['username'])>32)
+	{
+		$err[]='Your username must be between 3 and 32 characters!';
+	}
+
+	if(preg_match('/[^a-z0-9\-\_\.]+/i',$_POST['username']))
+	{
+		$err[]='Your username contains invalid characters!';
+	}
+
+	if(!checkEmail($_POST['email']))
+	{
+		$err[]='Your email is not valid!';
+	}
+
+	if(!count($err))
+	{
+		// If there are no errors
+		$pass = substr(md5($_SERVER['REMOTE_ADDR'].microtime().rand(1,100000)),0,6);
+		// Generate a random password
+
+		$_POST['email'] = mysql_real_escape_string($_POST['email']);
+		$_POST['username'] = mysql_real_escape_string($_POST['username']);
+		// Escape the input data
+
+		mysql_query("	INSERT INTO tz_members(usr,pass,email,regIP,dt)
+					VALUES(
+					'".$_POST['username']."',
+					'".md5($pass)."',
+					'".$_POST['email']."',
+					'".$_SERVER['REMOTE_ADDR']."',
+					NOW()
+		)");
+
+		if(mysql_affected_rows($link)==1)
+		{
+			send_mail(	'demo-test@tutorialzine.com',
+					$_POST['email'],
+					'Registration System Demo - Your New Password',
+					'Your password is: '.$pass);
+					$_SESSION['msg']['reg-success']='We sent you an email with your new password!';
+		}
+		else $err[]='This username is already taken!';
+	}
+
+	if(count($err))
+	{
+		$_SESSION['msg']['reg-err'] = implode('<br />',$err);
+	}
+
+	header("Location: demo.php");
+	exit;
+}
+
+$script = '';
+if($_SESSION['msg'])
+{
+	// The script below shows the sliding panel on page load
+	$script = '
+	<script type="text/javascript">
+	$(function(){
+		$("div#panel").show();
+		$("#toggle a").toggle();
+	});
+	</script>';
+}
