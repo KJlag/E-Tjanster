@@ -1,1 +1,31 @@
-martinwashere
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="utf-8">
+    <title> Kommentarsformulär </title>
+     <link rel="stylesheet" href ="Lab 1 e-tjanster/css/main.css">
+     <script src="Lab 1 e-tjanster/javascript/main.js"></script>
+ </head>
+<body>   
+ <form name="myForm" method= "GET" action="#" onsubmit="return validate()">
+    
+    <h><p><label>Vill du ge input?</label></p></h>
+   
+    <h1><p><label>Skriv en kommentar här</label></p></h1>
+
+    <p><label for="Name">Namn</label>
+    <input type="text" name="Name" placeholder="Namn på postare..." > </p>
+    
+    <p><label for="Comment">Skriv kommentar</label>
+    <textarea rows="5" cols="50" placeholder="Skriv inlägg här" name="Comment"></textarea> </p>
+    
+    
+    <p> <label for="email">Skriv in emailadress</label>
+    <input type="text" name="Email" placeholder="Emailadress..."> </p>
+
+  
+    <p> <input type="submit" value="Posta inlägg" > </p>
+    
+  </form>
+ </body>
+</html>
